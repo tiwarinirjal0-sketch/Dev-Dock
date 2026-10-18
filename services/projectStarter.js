@@ -100,28 +100,38 @@ function waitForPort(port, timeoutMs = 3000){
 //   return port;
 // }
 
-export async function startApp(info, projectPath, log){
-    const port = await getFreePort()
+export async function startApp(info, PROJECTS_DIR, log) {
+    const port = await getFreePort();
 
-     const child = spawn(info.startCommand, {
-    cwd: projectPath,
-    shell: true,
-    env: { PATH: process.env.PATH, PORT: String(port), NODE_ENV: 'production' },
-     });
+    const child = spawn("npm", ["start"], {
+        cwd: PROJECTS_DIR,
+        shell: false,
+        env: {
+            ...process.env,
+            PORT: String(port),
+            NODE_ENV: "production",
+        },
+        stdio: ["ignore", "pipe", "pipe"],
+    });
 
-    child.stdout.on("data", d => log(d.toString()))
-    child.stderr.on("data", d => log(d.toString()))
+    child.stdout.on("data", d => log(d.toString()));
+    child.stderr.on("data", d => log(d.toString()));
 
-    child.on("exit", code => {
-        running.delete(info.projectId)
-        // updateStatus(info.projectId, code === 0 ? "stopped" : "crashed")
+    child.on("error", err => {
+        log(`Failed to start app: ${err.message}`);
+        running.delete(info.projectId);
+    });
 
-    })
-    running.set(info.projectId, {child, port});
+    child.on("exit", (code, signal) => {
+        log(`App exited: code=${code}, signal=${signal}`);
+        running.delete(info.projectId);
+    });
 
-    await waitForPort(port)
-    // await updateStatus(info.projectId, "running")
-    return port
+    running.set(info.projectId, { child, port });
+
+    await waitForPort(port);
+
+    return port;
 }
 
 

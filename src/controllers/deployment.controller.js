@@ -7,8 +7,8 @@ import { mkdir,stat,readdir } from 'node:fs/promises';
 import crypto from "node:crypto"
 import { trusted } from 'mongoose';
 import extract from 'extract-zip';
-import { type } from 'node:os';
-import { projectDetector } from 'b../../services/projectDetector.js';
+import { type } from 'node:os'; ///home/nirjal/Projects/my-projects/devdock2/deployed-projects
+import { projectDetector } from '../../services/projectDetector.js';
 import { runCommand } from '../../services/buildRunner.js';
 import { logger } from '../../lib/logger.js';
 import { startApp } from '../../services/projectStarter.js';
@@ -27,7 +27,7 @@ export async function ProjectController(req,res){
             console.log("..................................................................................................")
             console.log("..................................................................................................")
 
-           const startInfos = await startApp(requiredInfos,projectPath, logger)
+           const startInfos = await startApp(requiredInfos,PROJECTS_DIR, logger)
 
 
             
