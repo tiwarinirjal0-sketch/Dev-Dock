@@ -1,5 +1,5 @@
 import { error } from 'node:console';
-import { access, constants, existsSync } from 'node:fs';
+import { access, constants, existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import decompress from 'decompress';
 import { PROJECTS_DIR } from '../src/config/config.js';
@@ -18,8 +18,12 @@ export async function projectDetector(filePath, projectPath){
 
             await extract(filePath, {dir:projectPath})
 
-            const nestedDir = await readdir(projectPath)
-            const files = await readdir(`${projectPath}/${nestedDir[0]}`)
+            const fileContents = readdirSync(projectPath)
+            
+            fileContents.map((file)=>console.log(file))
+
+            // const nestedDir = await readdir(projectPath)
+            // const files = await readdir(`${projectPath}/${nestedDir[0]}`)
             
             const packageFile = files.filter((fName)=>fName.includes("package.json"))
 
