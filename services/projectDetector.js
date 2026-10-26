@@ -1,5 +1,5 @@
 import { error } from 'node:console';
-import { access, constants, existsSync } from 'node:fs';
+import { access, constants, existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import decompress from 'decompress';
 import { PROJECTS_DIR } from '../src/config/config.js';
@@ -15,36 +15,57 @@ export async function projectDetector(filePath, projectPath){
            
              
             await mkdir(projectPath, {recursive:true})
-
             await extract(filePath, {dir:projectPath})
 
-            const nestedDir = await readdir(projectPath)
-            const files = await readdir(`${projectPath}/${nestedDir[0]}`)
+            let files = readdirSync(projectPath)
+            let pathToIndex = projectPath;
+
+            while(!files.includes("src"))
+            {
+               
+               for(let i=0;i<files.length;i++){
+                  const nested = readdirSync(path.resolve(projectPath,files[i]))
+                  if(nested.includes("src")){
+                     pathToIndex += `/${files[0]}`
+                     files = nested
+                     break;
+                  }
+               }
+               
+            }
+            pathToIndex += `/src`
+            const mainFiles = readdirSync(pathToIndex)
+            mainFiles.map(f=>console.log(f))
+           
+           
+
+            // const nestedDir = await readdir(projectPath)
+            // const files = await readdir(`${projectPath}/${nestedDir[0]}`)
             
-            const packageFile = files.filter((fName)=>fName.includes("package.json"))
+            // const packageFile = files.filter((fName)=>fName.includes("package.json"))
 
             
             
-            const jsonContents = await readFile(`${projectPath}/${nestedDir[0]}/${packageFile[0]}`, "utf-8")
+            // const jsonContents = await readFile(`${projectPath}/${nestedDir[0]}/${packageFile[0]}`, "utf-8")
 
-            const jsonContentsObj = await JSON.parse(jsonContents)
+            // const jsonContentsObj = await JSON.parse(jsonContents)
 
-            const framework = (jsonContentsObj.dependencies.express)?"express":null
-            const packageManager = "npm"
-            const installCommand = (files.includes("package-lock.json"))?"npm ci":null
-            const build = (jsonContentsObj.scripts.build)?jsonContents.scripts.build:null
-            const entryPoint = jsonContentsObj.scripts.start.split(" ")[1]
-            const startCommand = jsonContentsObj.scripts?.start ?? null
+            // const framework = (jsonContentsObj.dependencies.express)?"express":null
+            // const packageManager = "npm"
+            // const installCommand = (files.includes("package-lock.json"))?"npm ci":null
+            // const build = (jsonContentsObj.scripts.build)?jsonContents.scripts.build:null
+            // const entryPoint = jsonContentsObj.scripts.start.split(" ")[1]
+            // const startCommand = jsonContentsObj.scripts?.start ?? null
             
             
-             return {
-                framework,
-                packageManager,
-                installCommand,
-                build,
-                entryPoint,
-                startCommand
-             }
+            //  return {
+            //     framework,
+            //     packageManager,
+            //     installCommand,
+            //     build,
+            //     entryPoint,
+            //     startCommand
+            //  }
 
 
             
