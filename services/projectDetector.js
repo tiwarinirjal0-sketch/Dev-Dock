@@ -46,7 +46,7 @@ export async function projectDetector(filePath, projectPath){
 
             
             
-            // const jsonContents = await readFile(`${projectPath}/${nestedDir[0]}/${packageFile[0]}`, "utf-8")
+            // const jsonContents = await readFile(`${projectPath}/${nestedDir[0]}/${gi[0]}`, "utf-8")
 
             // const jsonContentsObj = await JSON.parse(jsonContents)
 
