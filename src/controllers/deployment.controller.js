@@ -8,10 +8,10 @@ import crypto from "node:crypto"
 import { trusted } from 'mongoose';
 import extract from 'extract-zip';
 import { type } from 'node:os'; ///home/nirjal/Projects/my-projects/devdock2/deployed-projects
-import { projectDetector } from '../../services/projectDetector.js';
 import { runCommand } from '../../services/buildRunner.js';
 import { logger } from '../../lib/logger.js';
 import { startApp } from '../../services/projectStarter.js';
+import { projectDetector } from '../../services/core/projectDetector.js';
 
 export async function ProjectController(req,res){
      let receivedFile = req.file;

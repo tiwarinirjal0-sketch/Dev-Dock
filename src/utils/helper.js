@@ -29,7 +29,7 @@ export async function searchFile(dir, fileName) {
 
                   } else if (file.endsWith(fileName)) {
 
-                        console.log(fileName + " found");
+                        
                         return filePath;
                   }
                }

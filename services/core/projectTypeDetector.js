@@ -4,7 +4,7 @@
    -return the type of language it is based upon
 */
 
-import { searchFile } from "../src/utils/helper.js";
+import { searchFile } from "../../src/utils/helper.js";
 
 export async function ProjectTypeDetector(projectPath){
     let markers = [];
@@ -70,4 +70,5 @@ export async function ProjectTypeDetector(projectPath){
                 
             }
             markers.forEach((f)=>console.log(f))
+            return markers
 }

@@ -2,16 +2,16 @@ import { error } from 'node:console';
 import { access,constants, existsSync, readdirSync, readFileSync,readdir } from 'node:fs';
 import path from 'node:path';
 import decompress from 'decompress';
-import { PROJECTS_DIR } from '../src/config/config.js';
+import { PROJECTS_DIR } from '../../src/config/config.js';
 import { mkdir,readFile,stat } from 'node:fs/promises';
 import crypto from "node:crypto"
 import { trusted, Types } from 'mongoose';
 import extract from 'extract-zip';
 import { type } from 'node:os';
 import { start } from 'node:repl';
-import { searchFile } from '../src/utils/helper.js';
-import { ProjectTypeDetector } from '../lib/projectTypeDetector.js';
-
+import { searchFile } from '../../src/utils/helper.js';
+import { ProjectTypeDetector } from './projectTypeDetector.js';
+import { FrameWorkDetection } from '../nodejs/frameworkDetector.js';
 
 
 export async function projectDetector(filePath, projectPath){
@@ -19,7 +19,21 @@ export async function projectDetector(filePath, projectPath){
              
             await mkdir(projectPath, {recursive:true})
             await extract(filePath, {dir:projectPath})
-            await ProjectTypeDetector(projectPath)
+            const ProjectType = await ProjectTypeDetector(projectPath)
+            console.log(ProjectType)
+               
+            switch (ProjectType[0]) {
+                case "node":
+                    const packageJsonPath = await searchFile(projectPath,"package.json")
+                    const jsonContents = await readFile(packageJsonPath,"utf-8")
+                    const jsonContentsObj = await JSON.parse(jsonContents)
+                    await FrameWorkDetection(jsonContentsObj)
+                    break;
+            
+                default:
+                    break;
+            }
+            
             
             // const packageJsonPath = await searchFile(projectPath,"package.json")
             // const packageLockJsonPath = await searchFile(projectPath,"package-lock.json")
