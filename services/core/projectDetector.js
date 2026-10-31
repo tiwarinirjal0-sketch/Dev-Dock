@@ -12,6 +12,7 @@ import { start } from 'node:repl';
 import { searchFile } from '../../src/utils/helper.js';
 import { ProjectTypeDetector } from './projectTypeDetector.js';
 import { FrameWorkDetection } from '../nodejs/frameworkDetector.js';
+import { packageManagerDetector } from '../nodejs/packageManagerDetector.js';
 
 
 export async function projectDetector(filePath, projectPath){
@@ -21,18 +22,24 @@ export async function projectDetector(filePath, projectPath){
             await extract(filePath, {dir:projectPath})
             const ProjectType = await ProjectTypeDetector(projectPath)
             console.log(ProjectType)
-               
-            switch (ProjectType[0]) {
+
+
+            ProjectType.forEach(async(f)=>{
+                switch (f) {
                 case "node":
                     const packageJsonPath = await searchFile(projectPath,"package.json")
                     const jsonContents = await readFile(packageJsonPath,"utf-8")
                     const jsonContentsObj = await JSON.parse(jsonContents)
                     await FrameWorkDetection(jsonContentsObj)
+                    await packageManagerDetector(projectPath)
                     break;
             
                 default:
                     break;
             }
+
+            })
+            
             
             
             // const packageJsonPath = await searchFile(projectPath,"package.json")
