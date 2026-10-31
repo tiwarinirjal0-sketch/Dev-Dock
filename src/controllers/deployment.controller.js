@@ -22,16 +22,17 @@ export async function ProjectController(req,res){
             const projectPath = path.join(PROJECTS_DIR, projectId) 
 
             const requiredInfos = await projectDetector(req.file.path, projectPath)
-            
-            const buildInfos = await runCommand(requiredInfos.installCommand, projectPath, logger)
-            console.log("..................................................................................................")
-            console.log("..................................................................................................")
-
-           const startInfos = await startApp(requiredInfos,PROJECTS_DIR, logger)
-
 
             
-            console.log('message reached')
+        //     const buildInfos = await runCommand(requiredInfos.installCommand, projectPath, logger)
+        //     console.log("..................................................................................................")
+        //     console.log("..................................................................................................")
+
+        //    const startInfos = await startApp(requiredInfos,PROJECTS_DIR, logger)
+
+
+            
+        //     console.log('message reached')
 
             return res.status(201).json({
                 contents: requiredInfos,
@@ -51,7 +52,8 @@ export async function ProjectController(req,res){
         return res.status(500).json({
             status:"failed",
             errormessage :error.message,
-            errorstack:error.stack
+            errorstack:error.stack,
+            
         })
      }
      
