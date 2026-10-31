@@ -9,6 +9,8 @@ import { trusted, Types } from 'mongoose';
 import extract from 'extract-zip';
 import { type } from 'node:os';
 import { start } from 'node:repl';
+import { searchFile } from '../src/utils/helper.js';
+import { ProjectTypeDetector } from '../lib/projectTypeDetector.js';
 
 
 
@@ -17,77 +19,28 @@ export async function projectDetector(filePath, projectPath){
              
             await mkdir(projectPath, {recursive:true})
             await extract(filePath, {dir:projectPath})
-
+            await ProjectTypeDetector(projectPath)
             
+            // const packageJsonPath = await searchFile(projectPath,"package.json")
+            // const packageLockJsonPath = await searchFile(projectPath,"package-lock.json")
+            // console.log(packageJsonPath)
+            // console.log(packageLockJsonPath)
 
-            // function searchFile(dir, fileName){
-               
-            //    readdir(dir, (err,fileNames)=>{
-            //       if(err) throw err
-   
-            //       for(const file of fileNames){
-            //          const filePath = path.join(dir, file)
-   
-            //          stat(filePath,(err,fileStat)=>{
-            //             if(err) throw err
-            //             if(fileStat.isDirectory()){
-            //                searchFile(filePath,fileName)
-            //             }else if(file.endsWith("index.js")){
-            //                console.log("found the indexfile")
-            //                consele.log(pathToIndex)
-            //             }
-            //          })
-            //       }
-            //    })
+            // const jsonContents = await readFile(packageJsonPath,"utf-8")
+            // const jsonContentsObj = await JSON.parse(jsonContents)
 
-            // }
-            async function searchFile(dir, fileName) {
-               const files = readdirSync(dir);
-
-               for (const file of files) {
-                  const filePath = path.join(dir, file);
-
-                  const fileCondition = await stat(filePath);
-
-                  if (fileCondition.isDirectory()) {
-
-                        const result = await searchFile(filePath, fileName);
-
-                        if (result) {
-                           return result;
-                        }
-
-                  } else if (file.endsWith(fileName)) {
-
-                        console.log(fileName + " found");
-                        return filePath;
-                  }
-               }
-
-               return null;
-            }
+            // const jsonLockContents = await readFile(packageLockJsonPath,"utf-8")
+            // const jsonLockContentsObj = await JSON.parse(jsonLockContents)
             
-
-            const packageJsonPath = await searchFile(projectPath,"package.json")
-            const packageLockJsonPath = await searchFile(projectPath,"package-lock.json")
-            console.log(packageJsonPath)
-            console.log(packageLockJsonPath)
-
-            const jsonContents = await readFile(packageJsonPath,"utf-8")
-            const jsonContentsObj = await JSON.parse(jsonContents)
-
-            const jsonLockContents = await readFile(packageLockJsonPath,"utf-8")
-            const jsonLockContentsObj = await JSON.parse(jsonLockContents)
-            
-            const frameWork = (jsonContentsObj.dependencies.express)?"express":null
-            const packageManager = "npm"
-            const installCommands = "npm ci"
-            const buildCommand = (jsonContentsObj.scripts.build)?jsonContentsObj.scripts.build:null
-            const entryPoint = jsonContentsObj.scripts.start.split[1]
-            const startCommand = jsonLockContentsObj.sctipts?.start ?? null
+            // const frameWork = (jsonContentsObj.dependencies.express)?"express":null
+            // const packageManager = "npm"
+            // const installCommands = "npm ci"
+            // const buildCommand = (jsonContentsObj.scripts.build)?jsonContentsObj.scripts.build:null
+            // const entryPoint = jsonContentsObj.scripts.start.split[1]
+            // const startCommand = jsonLockContentsObj.sctipts?.start ?? null
 
 
-            console.log(frameWork, packageManager, installCommands, entryPoint, startCommand)
+            // console.log(frameWork, packageManager, installCommands, entryPoint, startCommand)
             
             //let startCommand
             //   if(jsonContents.Obj.scritps){
@@ -119,14 +72,14 @@ export async function projectDetector(filePath, projectPath){
             // const startCommand = jsonContentsObj.scripts?.start ?? null
             
             
-             return {
-                frameWork,
-                startCommand,
-                installCommands,
-                entryPoint,
-                packageManager,
-                buildCommand
-             }
+            //  return {
+            //     frameWork,
+            //     startCommand,
+            //     installCommands,
+            //     entryPoint,
+            //     packageManager,
+            //     buildCommand
+            //  }
 
 
             

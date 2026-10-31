@@ -34,12 +34,12 @@ export async function ProjectController(req,res){
             
         //     console.log('message reached')
 
-            return res.status(201).json({
-                contents: requiredInfos,
-                message: "Project uploaded and extracted successfully"
+            // return res.status(201).json({
+            //     contents: requiredInfos,
+            //     message: "Project uploaded and extracted successfully"
                 
                 
-                });
+            //     });
               
                         
         
