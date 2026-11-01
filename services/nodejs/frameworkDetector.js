@@ -34,4 +34,5 @@ export async function FrameWorkDetection(packageJson){
         console.log(f)
         console.log(2)
     })
+    return frameWorks
 }

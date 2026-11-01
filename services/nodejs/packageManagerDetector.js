@@ -21,5 +21,6 @@ export async function packageManagerDetector(filePath){
         console.log(f)
         console.log(3)
     })
+    return packageManager
 
 }
