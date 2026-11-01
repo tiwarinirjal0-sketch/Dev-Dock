@@ -6,6 +6,7 @@ import { rootDetector } from './rootDetector.js';
 import { searchFile } from '../../src/utils/helper.js';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { lockFileDetector } from './lockfileDetector.js';
 
 
 export async function ProjectConfigAccumulator(projectPath){
@@ -14,7 +15,7 @@ export async function ProjectConfigAccumulator(projectPath){
     let scripts = []
     let rootFile = []
     let frameWork = []
-
+    let installCommand = []
     
     
     
@@ -30,6 +31,7 @@ export async function ProjectConfigAccumulator(projectPath){
                     packageManager =  await packageManagerDetector(projectPath)
                     scripts = await scriptsDetector(jsonContentsObj)
                     rootFile = await rootDetector(projectPath)
+                    installCommand = await lockFileDetector(projectPath)
                     break;
                   
             
@@ -57,10 +59,12 @@ export async function ProjectConfigAccumulator(projectPath){
 
         return {
             runtime: refinedRunTime,
+            installcommand : installCommand,
             packagemanager: refinedPackageManager,
             scripts:refinedScripts,
             rootfile:relativePath,
-            framework:refinedFrameWork
+            framework:refinedFrameWork,
+            startcommad:{command:"npm", args:["start"]}
 
         }
     }

@@ -11,6 +11,7 @@ import { type } from 'node:os';
 import { start } from 'node:repl';
 import { searchFile } from '../../src/utils/helper.js';
 import { ProjectConfigAccumulator } from './projectConfig.js';
+import { dependencyInstaller } from './dependecyInstaller.js';
 
 
 
@@ -20,6 +21,7 @@ export async function projectDetector(filePath, projectPath){
             await mkdir(projectPath, {recursive:true})
             await extract(filePath, {dir:projectPath})
             const configInfo = await ProjectConfigAccumulator(projectPath)
+            await dependencyInstaller(projectPath, configInfo)
             console.log(configInfo)
             
             
@@ -33,7 +35,7 @@ export async function projectDetector(filePath, projectPath){
             // const jsonContentsObj = await JSON.parse(jsonContents)
 
             // const jsonLockContents = await readFile(packageLockJsonPath,"utf-8")
-            // const jsonLockContentsObj = await JSON.parse(jsonLockContents)
+            // const jsonLockContentsObj = awaitj JSON.parse(jsonLockContents)
             
             // const frameWork = (jsonContentsObj.dependencies.express)?"express":null
             // const packageManager = "npm"
