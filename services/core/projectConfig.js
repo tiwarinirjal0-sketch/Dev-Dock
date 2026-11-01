@@ -5,6 +5,7 @@ import { scriptsDetector } from '../nodejs/scriptsDetector.js';
 import { rootDetector } from './rootDetector.js';
 import { searchFile } from '../../src/utils/helper.js';
 import { readFile } from 'node:fs/promises';
+import path from 'node:path';
 
 
 export async function ProjectConfigAccumulator(projectPath){
@@ -36,14 +37,30 @@ export async function ProjectConfigAccumulator(projectPath){
                     break;
             }
              }
-              
-        console.log("5")  
+            //  let refinedScripts = Object.fromEntries({name:"build",script:"hello"})
+
+            // Hard COded for now has to be made logical for conflicting cases or double runtime detections 
+
+            let refinedRunTime = runTime[0]
+            let refinedPackageManager = packageManager[0]
+
+
+            let refinedScripts = {}
+
+            for(const item of scripts){
+                 refinedScripts[item.name] = item.script
+            }
+
+            let refinedFrameWork = frameWork[0]
+
+            let relativePath = path.relative(projectPath,rootFile)
+
         return {
-            runTime:runTime,
-            packageManager,
-            scripts,
-            rootFile,
-            frameWork
+            runtime: refinedRunTime,
+            packagemanager: refinedPackageManager,
+            scripts:refinedScripts,
+            rootfile:relativePath,
+            framework:refinedFrameWork
 
         }
     }
