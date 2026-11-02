@@ -64,7 +64,7 @@ export async function ProjectConfigAccumulator(projectPath){
             scripts:refinedScripts,
             rootfile:relativePath,
             framework:refinedFrameWork,
-            startcommad:{command:"npm", args:["start"]}
+            startcommand:{command:"npm", args:["start"]}
 
         }
     }

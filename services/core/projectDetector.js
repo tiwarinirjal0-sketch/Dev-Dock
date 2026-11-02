@@ -12,6 +12,7 @@ import { start } from 'node:repl';
 import { searchFile } from '../../src/utils/helper.js';
 import { ProjectConfigAccumulator } from './projectConfig.js';
 import { dependencyInstaller } from './dependecyInstaller.js';
+import { ProjectStarter } from './ProjectStarter.js';
 
 
 
@@ -22,6 +23,7 @@ export async function projectDetector(filePath, projectPath){
             await extract(filePath, {dir:projectPath})
             const configInfo = await ProjectConfigAccumulator(projectPath)
             await dependencyInstaller(projectPath, configInfo)
+            await ProjectStarter(4000,projectPath,configInfo)
             console.log(configInfo)
             
             

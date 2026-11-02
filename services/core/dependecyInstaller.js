@@ -13,6 +13,12 @@ export async function dependencyInstaller(filePath, config){
 
     child.stdout.on("data",(chunk)=>console.log(chunk.toString()))
     child.stderr.on("data",(chunk)=>console.log(chunk.toString()))
+    const exitCode = await new Promise((resolve, reject) => {
+        child.on("error", reject);
 
+        child.on("close", (code) => {
+            resolve(code);
+        });
+});
     
 }
