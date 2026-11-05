@@ -20,7 +20,10 @@ export async function ProjectStarter(assignedPort,projectPath,config){
     child.stderr.on("data",chunk=>{console.log(chunk.toString())})
 
     child.on("error",(err)=>console.log(err))
-    child.on("close",(code)=>console.log("Process finsihed with " + code))
+    child.on("close",(code)=>
+        console.log("Process finsihed with " + code)
+        
+    )
 
 
     

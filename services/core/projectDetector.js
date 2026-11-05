@@ -14,6 +14,7 @@ import { ProjectConfigAccumulator } from './projectConfig.js';
 import { dependencyInstaller } from './dependecyInstaller.js';
 import { ProjectStarter } from './ProjectStarter.js';
 import { portAllocator } from '../../lib/portAllocator.js';
+import { urlGenerator } from './urlGenerator.js';
 
 
 
@@ -26,10 +27,13 @@ export async function projectDetector(filePath, projectPath){
             await dependencyInstaller(projectPath, configInfo)
             const port =await portAllocator()
             await ProjectStarter(port,projectPath,configInfo)
+            const hostedUrl = await urlGenerator(port)
+            
             console.log(configInfo)
+            console.log(hostedUrl)
             
             
-            
+
             // const packageJsonPath = await searchFile(projectPath,"package.json")
             // const packageLockJsonPath = await searchFile(projectPath,"package-lock.json")
             // console.log(packageJsonPath)
