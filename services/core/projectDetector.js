@@ -15,6 +15,7 @@ import { dependencyInstaller } from './dependecyInstaller.js';
 import { ProjectStarter } from './ProjectStarter.js';
 import { portAllocator } from '../../lib/portAllocator.js';
 import { urlGenerator } from './urlGenerator.js';
+import { reverseProxy } from './reverseproxy.js';
 
 
 
@@ -27,7 +28,8 @@ export async function projectDetector(filePath, projectPath){
             await dependencyInstaller(projectPath, configInfo)
             const port =await portAllocator()
             await ProjectStarter(port,projectPath,configInfo)
-            const hostedUrl = await urlGenerator(port)
+            const hostedUrl = await urlGenerator("name", port)
+            await reverseProxy("nirjal.hello",port, "127.0.0.1")
             
             console.log(configInfo)
             console.log(hostedUrl)
